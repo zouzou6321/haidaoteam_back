@@ -1,8 +1,0 @@
-_Callback({
-	"code":0,
-	"subcode":0,
-	"message":"succ",
-	"default":0,
-	"data":
-{"result":{"count":178,"like":0,"login":1}}}
-);
