@@ -108,34 +108,91 @@
 		<div class="tab-content">
 		  	<div class="tab-pane active" id="tab-imagen">
 		  		<div class="one-imagen">
-		  			<img src="{{ home_row.imageView1 }}" alt="">		  		</div>
+		  			<img style="height:567px;" src="{% if home_row.imageView1 %}
+						{{ home_row.imageView1 }}
+					{% endif %}" alt="image" id="home_imageView1">		  		</div>
+					<input type="text" style="width:757px;" value="在此输入图片的链接地址" id="in_home_imageView1" />
+					<input type="button" value="图片预览" style="width:100px;height:30px;" onclick="$('#home_imageView1').attr('src',$('#in_home_imageView1').val());"/>
                 <div class="one-imagen-footer">
-					<div class="one-titulo">
-						{{ home_row.fPage_tView }}					</div>
-					<div class="one-imagen-leyenda">
-						{{ home_row.imageBelow_tView }}	<br>
-{{ home_row.imageBelow_tView1 }}<br>
+					<div class="one-titulo" id="home_fPage_tView">
+						{% if home_row.fPage_tView %}
+							{{ home_row.fPage_tView }}
+						{% else %}
+							<input type="text" value="输入vol编号" id="in_home_fPage_tView"/>
+						{% endif %}				</div>
+					<div class="one-imagen-leyenda" id="home_Below_tView">
+						{% if home_row.imageBelow_tView %}
+							{{ home_row.imageBelow_tView }}
+						{% else %}
+							<input type="text" value="输入图片描述" id="in_home_Below_tView"/>
+						{% endif %}	<br>
+						{% if home_row.imageBelow_tView1 %}
+							{{ home_row.imageBelow_tView1 }}
+						{% else %}
+							<input type="text" value="作者名字/图片类型" id="in_home_Below_tView1"/>
+						{% endif %}<br>
 					</div>
 					<div class="clearfix"></div>
 				</div>
                 <div class="one-cita-wrapper">
-                    <div class="one-cita">
-						{{ home_row.new_tView|safe }}                    </div>
+                    <div class="one-cita" id="home_new_tView">
+                    	{% if home_row.new_tView %}
+							{{ home_row.new_tView }}
+						{% else %}
+							<textarea type="text" style="width:636px;overflow-y:hidden" wrap="hard" oninput="this.style.height=(this.scrollHeight) + 'px';" id="in_home_new_tView"></textarea>
+						{% endif %}                    </div>
                     <div class="one-pubdate">
-                        <p class="dom">{{ home_row.date_tView }}</p>
-                        <p class="may">{{ home_row.date1_tView }}</p>
+                        <p class="dom" id="home_date_tView">
+                        {% if home_row.date_tView %}
+							{{ home_row.date_tView }}
+						{% endif %}</p>
+                        <p class="may" id="home_date_tView1">
+                        {% if home_row.date_tView1 %}
+							{{ home_row.date_tView1 }}
+						{% endif %}</p>
                     </div>
                     <div class="clearfix"></div>
                 </div>
+                <script type="text/javascript">
+                function homeSubmit()
+                {
+                	if(!confirm("务必确保'ONE 首页'、'ONE 文章'、'ONE 问题'三个页面都填好数据了哟！！"))
+					{
+						return;
+					}
+                	var data={
+                		"sub" : "true",
+                		"image" : $("#in_home_imageView1").val(),
+                		"vol" : $("#in_home_fPage_tView").val(),
+                		"below_view" : $("#in_home_Below_tView").val(),
+                		"below_view1" : $("#in_home_Below_tView1").val(),
+                		"content" : $("#in_home_new_tView").val().replace(/[&]/g,"&amp;").replace(/[\"]/g,"&quot;").replace(/[<]/g,"&lt;").replace(/[>]/g,"&gt;").replace(/[\n\r]/gi,"<br>").replace(/[ ]/g,"&nbsp;"),
+                		"in_list_title" : $("#in_list_title").val(),
+                		"in_list_author" : $("#in_list_author").val(),
+                		"in_list_article" : $("#in_list_article").val().replace(/[&]/g,"&amp;").replace(/[\"]/g,"&quot;").replace(/[<]/g,"&lt;").replace(/[>]/g,"&gt;").replace(/[\n\r]/gi,"<br>").replace(/[ ]/g,"&nbsp;"),
+                		"in_list_author_novel" : $("#in_list_author_novel").val(),
+                		"in_qa_title" : $("#in_qa_title").val(),
+                		"in_qa_content" : $("#in_qa_content").val().replace(/[&]/g,"&amp;").replace(/[\"]/g,"&quot;").replace(/[<]/g,"&lt;").replace(/[>]/g,"&gt;").replace(/[\n\r]/gi,"<br>").replace(/[ ]/g,"&nbsp;"),
+                		"in_qa_answer_title" : $("#in_qa_answer_title").val(),
+                		"in_qa_answer_content" : $("#in_qa_answer_content").val().replace(/[&]/g,"&amp;").replace(/[\"]/g,"&quot;").replace(/[<]/g,"&lt;").replace(/[>]/g,"&gt;").replace(/[\n\r]/gi,"<br>").replace(/[ ]/g,"&nbsp;"),
+                	};
+                	$.post('/?editor=true',data,function(recive){
+						if(recive != "true") {
+							alert(recive);
+						}
+					});
+                }
+                </script>
+		  		<input type="button" value="全部提交" style="width:100px;height:30px;"  onclick="homeSubmit();" />
 		  		<div class="one-compartir">
 	                <wb:share-button appkey="1156389752" addition="number" type="button" default_text="你一直是我生命中永远都不可能重复的一场遭遇。 by 安·兰德（「ONE · 一个」VOL.545）"><iframe src="./haidao_one_files/weibosharev2(1).htm" width="128" height="25" frameborder="0" scrolling="no" marginheight="0"></iframe></wb:share-button>
 	                <script type="text/javascript">
 	                (function(){
 	                    var p = {
-	                        url:"{{ home_row.home_share_url }}",
+	                        url:"{% if home_row.home_share_url %}{{ home_row.home_share_url }}{% endif %}",
 	                        showcount:'1',
 	                        desc:'',
-	                        title:"{{ home_row.imageBelow_tView }} by {{ home_row.imageBelow_tView1 }}",
+	                        title:"{% if home_row.imageBelow_tView %}{{ home_row.imageBelow_tView }}{% endif %}{% if home_row.imageBelow_tView1 %} by {{ home_row.imageBelow_tView1 }}{% endif %}",
 	                        summary:'',
 	                        pics:'',
 	                        site:'「ONE · 一个」',
@@ -161,33 +218,46 @@
 			  		<div class="articulo-principal">
 			  			<div class="comilla-abrir">
 				  			<div class="comilla-cerrar">
-								{{ row_list.one_content_author_novel }}							</div>
+								{% if row_list.one_content_author_novel %}
+								{{ row_list.one_content_author_novel }}				                {% else %}
+				                	<input type="text" style="width:757px;" value="编辑篇首语" id="in_list_author_novel">
+				                {% endif %}							</div>
 						</div>
 			  		</div>
 
-			  		<h2 class="articulo-titulo">
-						{{ row_list.one_content_title }}			  		</h2>
+			  		<h2 class="articulo-titulo" id="list_title">
+						{% if row_list.one_content_title %}
+							{{ row_list.one_content_title }}
+						{% else %}
+							<input type="text" style="width:300px;" value="输入文章标题" id="in_list_title">
+						{% endif %}			  		</h2>
 
-			  		<p class="articulo-autor">
-						作者/{{ row_list.one_content_author }}			  		</p>
+			  		<p class="articulo-autor" id="list_author">
+						作者/{% if row_list.one_content_author %}
+							{{ row_list.one_content_author }}
+						{% else %}
+							<input type="text" value="作者姓名" id="in_list_author">
+						{% endif %}			  		</p>
 
-			  		<div class="articulo-contenido">
-						{{ row_list.one_content_article|safe }}
+			  		<div class="articulo-contenido" id="list_article">
+			  			{% if row_list.one_content_article %}
+							{{ row_list.one_content_article }}
+						{% else %}
+							<textarea type="text" style="width:757px;overflow-y:hidden" wrap="physical" oninput="this.style.height=(this.scrollHeight) + 'px';" id="in_list_article"></textarea>
+						{% endif %}
 					</div>
-
 			  					  		<p class="articulo-editor">
 						（责任编辑：相龙）			  		</p>
-			  		
 			  		<p class="articulo-compartir">
 		                <wb:share-button appkey="1156389752" addition="number" type="button" default_text="伤害，永远停留在它发生时候的样子『你以为你未曾赢过的原因只是没有尽力，其实你尽力了也是一败涂地。在感情的世界里，亦然。』（李遥策「ONE · 一个」VOL.545）"><iframe src="./haidao_one_files/weibosharev2.htm" width="128" height="25" frameborder="0" scrolling="no" marginheight="0"></iframe></wb:share-button>
 		                <script type="text/javascript">
 		                (function(){
 		                    var p = {
-		                        url:"{{ row_list.list_share_url }}#articulo",
+		                        url:"{% if row_list.list_share_url %}{{ row_list.list_share_url }}{% endif %}#articulo",
 		                        showcount:'1',
 		                        desc:'',
 		                        title:"\u4f24\u5bb3\uff0c\u6c38\u8fdc\u505c\u7559\u5728\u5b83\u53d1\u751f\u65f6\u5019\u7684\u6837\u5b50\uff08\u674e\u9065\u7b56\u300cONE \u00b7 \u4e00\u4e2a\u300dVOL.545\uff09",
-		                        summary:"{{ row_list.one_content_author_novel }}",
+		                        summary:"\u4f60\u4ee5\u4e3a\u4f60\u672a\u66fe\u8d62\u8fc7\u7684\u539f\u56e0\u53ea\u662f\u6ca1\u6709\u5c3d\u529b\uff0c\u5176\u5b9e\u4f60\u5c3d\u529b\u4e86\u4e5f\u662f\u4e00\u8d25\u6d82\u5730\u3002\u5728\u611f\u60c5\u7684\u4e16\u754c\u91cc\uff0c\u4ea6\u7136\u3002",
 		                        pics:'',
 		                        site:'「ONE · 一个」',
 		                        style:'102',
@@ -217,31 +287,46 @@
 
 			  		<div class="cuestion-q-icono"></div>
 
-			  		<h4>
-			  			{{ row_qa.question_title }}			  		</h4>
+			  		<h4 id="qa_title">
+			  			{% if row_qa.question_title %}
+							{{ row_qa.question_title }}
+						{% else %}
+							<input type="text" value="问题标题" id="in_qa_title">
+						{% endif %}		  		</h4>
 
-			  		<div class="cuestion-contenido">
-						{{ row_qa.question_content|safe }}			  		</div>
+			  		<div class="cuestion-contenido" id="qa_content">
+			  			{% if row_qa.question_content %}
+							{{ row_qa.question_content }}
+						{% else %}
+							<textarea type="text" style="width:757px;overflow-y:hidden" wrap="physical" oninput="this.style.height=(this.scrollHeight) + 'px';" id="in_qa_content"></textarea>
+						{% endif %}			  		</div>
 
 			  		<hr>
 
 			  		<div class="cuestion-a-icono"></div>
 
-			  		<h4>
-			  			{{ row_qa.question_answer_title }}			  		</h4>
+			  		<h4 id="qa_answer_title">
+			  			{% if row_qa.question_answer_title %}
+							{{ row_qa.question_answer_title }}
+						{% else %}
+							<input type="text" value="回答标题"  id="in_qa_answer_title">
+						{% endif %}			  		</h4>
 
-			  		<div class="cuestion-contenido">
-						{{ row_qa.question_answer_content|safe }}		  		</div>
-
+			  		<div class="cuestion-contenido" id="qa_answer_content">
+			  			{% if row_qa.question_answer_content %}
+							{{ row_qa.question_answer_content }}
+						{% else %}
+							<textarea type="text" style="width:757px;overflow-y:hidden" wrap="physical" oninput="this.style.height=(this.scrollHeight) + 'px';" id="in_qa_answer_content"></textarea>
+						{% endif %}		  		</div>
+						
 			  					  		<p class="cuestion-editor">
 						（责任编辑：相龙）			  		</p>
-			  		
 			  		<div class="cuestion-compartir">
-		                <wb:share-button appkey="1156389752" addition="number" type="button" default_text="@金国栋TOM答sLow cHiLd： 为什么人的感情需求永远无法满足？（「ONE · 一个」VOL.545）"><iframe src="./haidao_one_files/weibosharev2(2).htm" width="128" height="25" frameborder="0" scrolling="no" marginheight="0"></iframe></wb:share-button>
+		                <wb:share-button appkey="1156389752" addition="number" type="button" default_text="@海盗团队： 为什么人的感情需求永远无法满足？（「ONE · 一个」VOL.545）"><iframe src="./haidao_one_files/weibosharev2(2).htm" width="128" height="25" frameborder="0" scrolling="no" marginheight="0"></iframe></wb:share-button>
 		                <script type="text/javascript">
 		                (function(){
 		                    var p = {
-		                        url:"{{ row_qa.qa_share_url }}#cuestion",
+		                        url:"{% if row_qa.qa_share_url %}{{ row_qa.qa_share_url }}{% endif %}#cuestion",
 		                        showcount:'1',
 		                        desc:'',
 		                        title:"@\u91d1\u56fd\u680bTOM\u7b54sLow cHiLd\uff1a \u4e3a\u4ec0\u4e48\u4eba\u7684\u611f\u60c5\u9700\u6c42\u6c38\u8fdc\u65e0\u6cd5\u6ee1\u8db3\uff1f\uff08\u300cONE \u00b7 \u4e00\u4e2a\u300dVOL.545\uff09",

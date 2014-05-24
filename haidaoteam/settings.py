@@ -39,7 +39,7 @@ ALLOWED_HOSTS = []
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Asia/Shanghai'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -77,8 +77,10 @@ STATIC_ROOT = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'static/
 # Example: "http://media.lawrence.com/static/"
 if 'SERVER_SOFTWARE' in os.environ:
     STATIC_URL = 'http://haidaoteam.sinaapp.com/haidao_one_files/'
+    ROOT_URL = 'http://haidaoteam.sinaapp.com/'
 else:
     STATIC_URL = 'http://localhost:8000/haidao_one_files/'
+    ROOT_URL = 'http://localhost:8000/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (

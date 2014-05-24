@@ -68,3 +68,7 @@ class one_feedback(models.Model):
     email = models.TextField()
     phone = models.TextField()
     content = models.TextField()
+    
+class editor_user(models.Model):
+    name = models.TextField()
+    passd = models.TextField()
